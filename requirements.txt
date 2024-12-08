@@ -1,0 +1,4 @@
+tqdm == 4.64.0
+typer[all]
+Jinja2
+rich
