@@ -10,9 +10,6 @@ def parse_args():
     parser.add_argument(
         "--service-name", type=str, required=True, help="Name of the service."
     )
-    parser.add_argument(
-        "--output-dir", type=Path, default=Path.cwd(), help="Directory for service output."
-    )
     return parser.parse_args()
 
 def main_task(service):
