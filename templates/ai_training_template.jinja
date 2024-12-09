@@ -1,0 +1,71 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+
+def load_dataset(file_path):
+    """
+    Load dataset from a CSV file.
+
+    :param file_path: Path to the dataset file.
+    :return: Pandas DataFrame.
+    """
+    return pd.read_csv(file_path)
+
+def preprocess_data(df, target_column):
+    """
+    Preprocess the dataset.
+
+    :param df: DataFrame containing the dataset.
+    :param target_column: Name of the target column.
+    :return: Tuple (X, y) where X is features and y is target.
+    """
+    X = df.drop(columns=[target_column])
+    y = df[target_column]
+    return X, y
+
+def train_model(X_train, y_train):
+    """
+    Train a RandomForestClassifier model.
+
+    :param X_train: Training features.
+    :param y_train: Training labels.
+    :return: Trained model.
+    """
+    model = RandomForestClassifier(random_state=42)
+    model.fit(X_train, y_train)
+    return model
+
+def evaluate_model(model, X_test, y_test):
+    """
+    Evaluate the model on the test set.
+
+    :param model: Trained model.
+    :param X_test: Test features.
+    :param y_test: Test labels.
+    :return: Accuracy score.
+    """
+    predictions = model.predict(X_test)
+    return accuracy_score(y_test, predictions)
+
+def main():
+    # Path to dataset
+    dataset_path = "dataset.csv"
+    target_column = "target"
+
+    # Load and preprocess data
+    df = load_dataset(dataset_path)
+    X, y = preprocess_data(df, target_column)
+
+    # Split data into train and test sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Train the model
+    model = train_model(X_train, y_train)
+
+    # Evaluate the model
+    accuracy = evaluate_model(model, X_test, y_test)
+    print(f"Model Accuracy: {accuracy:.2f}")
+
+if __name__ == "__main__":
+    main()

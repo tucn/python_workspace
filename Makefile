@@ -22,6 +22,21 @@ generate_api:
 	@python3 codegen.py generate-api --endpoint-name $(ENDPOINT_NAME) --service-name $(SERVICE_NAME)
 	@echo "API endpoint saved as: $(ENDPOINT_NAME)_api.py"
 
+# Generate gaming skeleton
+.PHONY: generate_game
+generate_game:
+	@echo "Generating gaming skeleton for: $(GAME_NAME)"
+	@python3 codegen.py generate-game --game-name $(GAME_NAME) --service-name $(SERVICE_NAME)
+	@echo "Gaming skeleton saved as: $(GAME_NAME)_game.py"
+
+# Generate AI training skeleton
+.PHONY: generate_ai_training
+generate_ai_training:
+	@echo "Generating AI training skeleton for: $(PROJECT_NAME)"
+	@python3 codegen.py generate-ai-training --project-name $(PROJECT_NAME) --service-name $(SERVICE_NAME)
+	@echo "AI training skeleton saved as: $(PROJECT_NAME)_training.py"
+
+
 # List available templates
 .PHONY: templates
 templates:

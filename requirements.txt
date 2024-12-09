@@ -3,3 +3,5 @@ typer[all]
 Jinja2
 rich
 flask
+pygame
+scikit-learn

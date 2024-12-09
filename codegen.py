@@ -53,6 +53,29 @@ def generate_api(
     context = {"endpoint_name": endpoint_name}
     generate_code("api_endpoint_template.jinja", output_path, context)
 
+@app.command()
+def generate_game(
+    game_name: str = typer.Option(..., help="Name of the game."),
+    service_name: str = typer.Option(..., help="Name of the service endpoint."),
+    output_dir: Path = typer.Option(Path.cwd(), help="Directory for generated game code."),
+):
+    """Generate a gaming template."""
+    output_path = output_dir / service_name/ f"{game_name}_game.py"
+    context = {"game_name": game_name}
+    generate_code("gaming_template.jinja", output_path, context)
+
+@app.command()
+def generate_ai_training(
+    project_name: str = typer.Option(..., help="Name of the AI training project."),
+    service_name: str = typer.Option(..., help="Name of the service endpoint."),
+    output_dir: Path = typer.Option(Path.cwd(), help="Directory for generated project code."),
+):
+    """Generate an AI training template."""
+    output_path = output_dir / service_name/ f"{project_name}_training.py"
+    context = {"project_name": project_name}
+    generate_code("ai_training_template.jinja", output_path, context)
+
+
 
 @app.command()
 def list_templates():
