@@ -10,10 +10,13 @@ def parse_args():
     parser.add_argument(
         "--service-name", type=str, required=True, help="Name of the service."
     )
+    parser.add_argument(
+        "--output-dir", type=Path, default=Path.cwd(), help="Directory for service output."
+    )
     return parser.parse_args()
 
 def main_task(service):
-    """Main task for the example."""
+    """Main task for the MyService."""
     for i in service.progress(range(10), description="Main Task"):
         if i == 5:  # Simulate an error
             raise ValueError("Simulated Error!")
@@ -29,7 +32,7 @@ def save_results():
 
 if __name__ == "__main__":
     # Create an instance of the Foundation class
-    service = Foundation(service_name="example")
+    service = Foundation(service_name="MyService")
 
     # Add deferred tasks
     service.defer(cleanup)
