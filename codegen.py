@@ -13,34 +13,45 @@ TEMPLATES_DIR = "templates"
 env = Environment(loader=FileSystemLoader(TEMPLATES_DIR))
 
 
-def generate_service(service_name: str, output_file: Path):
-    """Generate service skeleton code using a template."""
-    # Load template
-    template = env.get_template("service_template.jinja")
+def generate_code(template_name: str, output_path: Path, context: dict):
+    """Generate code from a specified template."""
+    # Load the chosen template
+    template = env.get_template(template_name)
 
-    # Render template with provided service name
-    code = template.render(service_name=service_name)
+    # Render the template with the provided context
+    code = template.render(**context)
 
-    output_folder = Path(service_name)
-    output_file = output_folder / f"{output_file}.py"
+    # Ensure output directory exists
+    output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    # Write generated code to the output file
-    output_folder.mkdir(parents=True, exist_ok=True)
-    with open(output_file, "w") as f:
+    # Write the generated code to the output file
+    with open(output_path, "w") as f:
         f.write(code)
 
-    console.print(f"[green]Generated service skeleton for '{service_name}' in '{output_file}'[/]")
+    console.print(f"[green]Generated '{template_name}' at '{output_path}'[/]")
 
 
 @app.command()
-def generate(
-    service_name: str = typer.Option(..., help="The name of the service to generate."),
-    output_file: Path = typer.Option(
-        ..., help="The output file to save the generated service skeleton."
-    ),
+def generate_service(
+    service_name: str = typer.Option(..., help="Name of the service endpoint."),
+    output_dir: Path = typer.Option(Path.cwd(), help="Directory for generated API code."),
 ):
     """Generate a service skeleton."""
-    generate_service(service_name, output_file)
+    output_path = output_dir / service_name / f"{service_name}.py"
+    context = {"service_name": service_name}
+    generate_code("service_template.jinja", output_path, context)
+
+
+@app.command()
+def generate_api(
+    endpoint_name: str = typer.Option(..., help="Name of the API endpoint."),
+    service_name: str = typer.Option(..., help="Name of the service endpoint."),
+    output_dir: Path = typer.Option(Path.cwd(), help="Directory for generated API code."),
+):
+    """Generate an API endpoint."""
+    output_path = output_dir / service_name / f"{endpoint_name}_api.py"
+    context = {"endpoint_name": endpoint_name}
+    generate_code("api_endpoint_template.jinja", output_path, context)
 
 
 @app.command()
